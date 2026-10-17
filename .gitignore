@@ -1,0 +1,26 @@
+**/bin/
+**/obj/
+.vs/
+.idea/
+*.user
+.env
+**/appsettings.Development.json
+node_modules/
+dist/
+# Configurações pessoais
+*.suo
+*.rsuser
+
+# Segredos e ambientes locais
+.env.*
+!.env.example
+**/appsettings.Local.json
+**/appsettings.*.local.json
+
+# Angular
+.angular/
+coverage/
+
+# Arquivos temporários
+*.log
+*.tmp

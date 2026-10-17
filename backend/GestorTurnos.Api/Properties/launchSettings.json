@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "GestorTurnos.Api": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:62575;http://localhost:62576"
+    }
+  }
+}
