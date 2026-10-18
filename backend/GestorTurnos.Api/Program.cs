@@ -1,5 +1,6 @@
 using GestorTurnos.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using GestorTurnos.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection não configurada.");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<ExcelShiftImportService>();
 
 var app = builder.Build();
 

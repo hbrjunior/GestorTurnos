@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web"><PropertyGroup><TargetFramework>net9.0</TargetFramework></PropertyGroup><ItemGroup><PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web"><PropertyGroup><TargetFramework>net9.0</TargetFramework></PropertyGroup><ItemGroup><PackageReference Include="ClosedXML" Version="0.105.0" /><PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
   <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
   <PrivateAssets>all</PrivateAssets>
 </PackageReference><ProjectReference Include="../GestorTurnos.Infrastructure/GestorTurnos.Infrastructure.csproj" /><PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10" /><PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" /></ItemGroup></Project>
