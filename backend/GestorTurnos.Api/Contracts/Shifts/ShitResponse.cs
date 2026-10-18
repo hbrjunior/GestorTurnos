@@ -6,5 +6,7 @@ public sealed record ShiftResponse(
     string EmployeeName,
     DateOnly Date,
     TimeOnly StartTime,
-    TimeOnly EndTime
+    TimeOnly EndTime,
+    bool? IsHoliday = null,
+    string? HolidayName = null
 );

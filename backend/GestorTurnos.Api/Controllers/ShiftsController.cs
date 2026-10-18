@@ -1,20 +1,24 @@
 ﻿
-using System.Data;
 using GestorTurnos.Api.Contracts.Shifts;
+using GestorTurnos.Api.Services;
 using GestorTurnos.Domain.Entities;
 using GestorTurnos.Domain.Rules;
 using GestorTurnos.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace GestorTurnos.Api.Controllers;
 
 [ApiController]
 [Route("api/shifts")]
+
 public sealed class ShiftsController(
-    AppDbContext db) : ControllerBase
+    AppDbContext db,
+    HolidayService holidayService) : ControllerBase
 {
+
     [HttpGet]
     public async Task<ActionResult<List<ShiftResponse>>> GetAll(
         DateOnly? from,
@@ -24,7 +28,10 @@ public sealed class ShiftsController(
         if (from.HasValue && to.HasValue && from > to)
             return BadRequest("O período informado é inválido.");
 
-        var query = db.Shifts.AsNoTracking().AsQueryable();
+        var query = db.Shifts
+            .AsNoTracking()
+            .Include(s => s.Employee)
+            .AsQueryable();
 
         if (from.HasValue)
             query = query.Where(s => s.Date >= from.Value);
@@ -35,17 +42,59 @@ public sealed class ShiftsController(
         var shifts = await query
             .OrderBy(s => s.Date)
             .ThenBy(s => s.StartTime)
-            .Select(s => new ShiftResponse(
+            .ToListAsync(ct);
+
+        var holidayCache = new Dictionary<
+            (string Country, int Year),
+            IReadOnlyDictionary<DateOnly, string>?>();
+
+        var countryYears = shifts
+            .Select(s => (
+                Country: s.Employee.CountryCode.ToUpperInvariant(),
+                Year: s.Date.Year))
+            .Distinct()
+            .ToList();
+
+        foreach (var item in countryYears)
+        {
+            holidayCache[item] =
+                await holidayService.GetHolidaysAsync(
+                    item.Country,
+                    item.Year,
+                    ct);
+        }
+
+        var result = shifts.Select(s =>
+        {
+            var key = (
+                Country: s.Employee.CountryCode.ToUpperInvariant(),
+                Year: s.Date.Year);
+
+            var holidays = holidayCache[key];
+
+            bool? isHoliday = holidays is null
+                ? null
+                : holidays.ContainsKey(s.Date);
+
+            string? holidayName = null;
+
+            if (holidays is not null)
+                holidays.TryGetValue(s.Date, out holidayName);
+
+            return new ShiftResponse(
                 s.Id,
                 s.EmployeeId,
                 s.Employee.Name,
                 s.Date,
                 s.StartTime,
-                s.EndTime))
-            .ToListAsync(ct);
+                s.EndTime,
+                isHoliday,
+                holidayName);
+        }).ToList();
 
-        return Ok(shifts);
+        return Ok(result);
     }
+
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ShiftResponse>> GetById(
@@ -55,12 +104,14 @@ public sealed class ShiftsController(
         var shift = await db.Shifts.AsNoTracking()
             .Where(s => s.Id == id)
             .Select(s => new ShiftResponse(
-                s.Id,
-                s.EmployeeId,
-                s.Employee.Name,
-                s.Date,
-                s.StartTime,
-                s.EndTime))
+                        s.Id,
+                        s.EmployeeId,
+                        s.Employee.Name,
+                        s.Date,
+                        s.StartTime,
+                        s.EndTime,
+                        null,
+                        null))
             .FirstOrDefaultAsync(ct);
 
         return shift is null ? NotFound() : Ok(shift);

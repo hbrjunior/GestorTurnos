@@ -16,6 +16,14 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 builder.Services.AddScoped<ExcelShiftImportService>();
 builder.Services.AddScoped<ExcelShiftExportService>();
 
+builder.Services.AddMemoryCache();
+
+builder.Services.AddHttpClient<HolidayService>(client =>
+{
+    client.BaseAddress = new Uri("https://date.nager.at/");
+    client.Timeout = TimeSpan.FromSeconds(5);
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
