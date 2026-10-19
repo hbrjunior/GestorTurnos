@@ -26,6 +26,37 @@ builder.Services.AddHttpClient<HolidayService>(client =>
 
 var app = builder.Build();
 
+
+if (builder.Configuration.GetValue<bool>("Database:ApplyMigrations"))
+{
+    using var scope = app.Services.CreateScope();
+
+    var db = scope.ServiceProvider
+        .GetRequiredService<AppDbContext>();
+
+    const int maxAttempts = 15;
+    var delay = TimeSpan.FromSeconds(3);
+
+    for (var attempt = 1; attempt <= maxAttempts; attempt++)
+    {
+        try
+        {
+            await db.Database.MigrateAsync();
+            Console.WriteLine("Database migrations applied successfully.");
+            break;
+        }
+        catch (Microsoft.Data.SqlClient.SqlException)
+            when (attempt < maxAttempts)
+        {
+            Console.WriteLine(
+                $"SQL Server aún no disponible. Intento {attempt}/{maxAttempts}.");
+
+            await Task.Delay(delay);
+        }
+    }
+}
+
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

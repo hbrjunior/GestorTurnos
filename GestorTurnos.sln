@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.11.12306.390 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}"
 EndProject
@@ -12,6 +12,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestorTurnos.Api", "backend\GestorTurnos.Api\GestorTurnos.Api.csproj", "{EFAA5E0B-5C77-4ACC-BF00-8427E89AB219}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestorTurnos.Tests", "backend\GestorTurnos.Tests\GestorTurnos.Tests.csproj", "{71D97443-4AAC-4E1F-A06A-A928A1399421}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{A3086154-9CF5-422A-AEB4-A898066A32F9}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,5 +85,8 @@ Global
 		{EB637354-C652-4189-BC18-0970D3ADEE23} = {1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}
 		{EFAA5E0B-5C77-4ACC-BF00-8427E89AB219} = {1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}
 		{71D97443-4AAC-4E1F-A06A-A928A1399421} = {1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {66753824-B9C0-402F-A5E0-4BDE35428F75}
 	EndGlobalSection
 EndGlobal
