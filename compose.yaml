@@ -31,6 +31,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:8080
       Database__ApplyMigrations: "true"
+      Swagger__Enabled: "true"
       ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=GestorTurnos;User Id=sa;Password=${MSSQL_SA_PASSWORD};Encrypt=True;TrustServerCertificate=True"
     ports:
       - "127.0.0.1:8080:8080"

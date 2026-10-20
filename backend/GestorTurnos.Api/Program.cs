@@ -56,8 +56,8 @@ if (builder.Configuration.GetValue<bool>("Database:ApplyMigrations"))
     }
 }
 
-
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() ||
+    app.Configuration.GetValue<bool>("Swagger:Enabled"))
 {
     app.MapOpenApi();
     app.UseSwagger();
